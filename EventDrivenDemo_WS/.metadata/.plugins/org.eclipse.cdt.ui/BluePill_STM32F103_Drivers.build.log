@@ -1,0 +1,10 @@
+17:01:12 **** Incremental Build of configuration Debug for project BluePill_STM32F103_Drivers ****
+make -j8 all 
+arm-none-eabi-size   BluePill_STM32F103_Drivers.elf 
+   text	   data	    bss	    dec	    hex	filename
+   3248	      8	   1568	   4824	   12d8	BluePill_STM32F103_Drivers.elf
+Finished building: default.size.stdout
+ 
+
+17:01:13 Build Finished. 0 errors, 0 warnings. (took 249ms)
+

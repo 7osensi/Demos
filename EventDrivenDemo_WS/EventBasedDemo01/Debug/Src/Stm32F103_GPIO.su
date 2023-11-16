@@ -1,0 +1,12 @@
+../Src/Stm32F103_GPIO.c:31:13:MCAL_GPIO_PeripheralClkControl	16	static
+../Src/Stm32F103_GPIO.c:81:13:MCAL_GPIO_Init	24	static
+../Src/Stm32F103_GPIO.c:148:6:MCAL_GPIO_DeInit	16	static
+../Src/Stm32F103_GPIO.c:183:4:MCAL_GPIO_ReadInputPin	24	static
+../Src/Stm32F103_GPIO.c:208:5:MCAL_GPIO_ReadInputPort	24	static
+../Src/Stm32F103_GPIO.c:236:6:MCAL_GPIO_WriteOutputPin	16	static
+../Src/Stm32F103_GPIO.c:266:6:MCAL_GPIO_WriteOutputPort	16	static
+../Src/Stm32F103_GPIO.c:288:6:MCAL_GPIO_ToggleOutputPin	16	static
+../Src/Stm32F103_GPIO.c:310:6:MCAL_GPIO_IRQConfig	16	static
+../Src/Stm32F103_GPIO.c:343:6:MCAL_GPIO_IRQHandling	16	static
+../Src/Stm32F103_GPIO.c:357:6:GPIO_RegisterCallback	16	static
+../Src/Stm32F103_GPIO.c:361:6:EXTI15_10_IRQHandler	8	static

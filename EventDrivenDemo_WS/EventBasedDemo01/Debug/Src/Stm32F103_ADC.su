@@ -1,0 +1,4 @@
+../Src/Stm32F103_ADC.c:14:13:ADC_Init	16	static
+../Src/Stm32F103_ADC.c:48:13:ADC_Conversion	4	static
+../Src/Stm32F103_ADC.c:55:12:ADC_Read	16	static
+../Src/Stm32F103_ADC.c:63:6:ADC_Registering	16	static
