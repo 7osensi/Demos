@@ -1,6 +1,5 @@
-00:48:21 **** Incremental Build of configuration Debug for project EventBasedDemo01 ****
+13:55:59 **** Incremental Build of configuration Debug for project EventBasedDemo01 ****
 make -j8 all 
-arm-none-eabi-gcc "../Src/Stm32F103_GPIO.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DSTM32 -DSTM32F1 -DSTM32F103C8Tx -c -I../Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/Stm32F103_GPIO.d" -MT"Src/Stm32F103_GPIO.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/Stm32F103_GPIO.o"
 arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DSTM32 -DSTM32F1 -DSTM32F103C8Tx -c -I../Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/main.o"
 arm-none-eabi-gcc -o "EventBasedDemo01.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\Mentorship\EventDrivenDemo_WS\EventBasedDemo01\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="EventBasedDemo01.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 Finished building target: EventBasedDemo01.elf
@@ -8,11 +7,11 @@ Finished building target: EventBasedDemo01.elf
 arm-none-eabi-size   EventBasedDemo01.elf 
 arm-none-eabi-objdump -h -S  EventBasedDemo01.elf  > "EventBasedDemo01.list"
    text	   data	    bss	    dec	    hex	filename
-   1792	      8	   1568	   3368	    d28	EventBasedDemo01.elf
+   2532	      8	   1568	   4108	   100c	EventBasedDemo01.elf
 Finished building: default.size.stdout
  
 Finished building: EventBasedDemo01.list
  
 
-00:48:22 Build Finished. 0 errors, 0 warnings. (took 436ms)
+13:55:59 Build Finished. 0 errors, 0 warnings. (took 501ms)
 
