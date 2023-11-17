@@ -109,7 +109,7 @@ extern void MCAL_GPIO_Init(GPIO_Handle_t *pGPIOHandle)
 	{
 		/* 1. Configure The Mode of The GPIO Pin */
 
-		TempReg = ( (pGPIOHandle->GPIO_PinConfig.GPIO_PinMode) << ( (4 * (pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber) - 32) ) );
+		TempReg = ( (pGPIOHandle->GPIO_PinConfig.GPIO_PinMode) << ( (4 * pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber) - 32)  );
 
 		pGPIOHandle->pGPIOx->CR[1]  &= ~(0x3 << ( (4 * pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber) - 32) ); /* Clearing Pins */
 
@@ -119,9 +119,9 @@ extern void MCAL_GPIO_Init(GPIO_Handle_t *pGPIOHandle)
 
 		/* 2. Configure The Configuration of The GPIO Pin */
 
-		TempReg = ( (pGPIOHandle->GPIO_PinConfig.GPIO_PinConfiguration) << ( ( (4 * (pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber) ) + 2) - 32) );
+		TempReg = ( (pGPIOHandle->GPIO_PinConfig.GPIO_PinConfiguration) << ((4 * pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber) - 32 + 2));
 
-		pGPIOHandle->pGPIOx->CR[1]  &= ~(0x3 << ( ( (4 * pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber) + 2) - 32) ); /* Clearing Pins */
+		pGPIOHandle->pGPIOx->CR[1]  &= ~(0x3 << ((4 * pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber) - 32 + 2)); /* Clearing Pins */
 
 		pGPIOHandle->pGPIOx->CR[1] |= TempReg;
 
@@ -312,12 +312,12 @@ void MCAL_GPIO_IRQConfig(u8 u8IRQNumber, u8 u8EN_DIS) /* Configuration of NVIC R
 	/* Enable Interrupt */
 	if(u8EN_DIS == EXTI_ENABLE)
 	{
-		if( (u8IRQNumber >= 0) && (u8IRQNumber <= 31) )
+		if((u8IRQNumber >= 0) && (u8IRQNumber <= 31))
 		{
 			NVIC_ISER0 |= (1 << u8IRQNumber);
 		}
 
-		else if( (u8IRQNumber >= 32) && (u8IRQNumber <= 63) )
+		else if((u8IRQNumber >= 32) && (u8IRQNumber <= 63))
 		{
 			NVIC_ISER1 |= (1 << (u8IRQNumber - 32));
 		}
@@ -343,14 +343,11 @@ void MCAL_GPIO_IRQConfig(u8 u8IRQNumber, u8 u8EN_DIS) /* Configuration of NVIC R
 void MCAL_GPIO_IRQHandling (u8 u8PinNumber)
 {
 	/* Check Bit */
-	if( MEXTI->PR & ( 0x1 << u8PinNumber ) )
-	{
-		MEXTI->PR |= ( 0x1 << u8PinNumber ); /* Reset By Setting The Pin */
-	}
-	else
-	{
-		/* Do Nothing */
-	}
+//	if( MEXTI->PR & (0x1 << u8PinNumber))
+//	{
+//		MEXTI->PR |= (1 << u8PinNumber); /* Reset By Setting The Pin */
+//	}
+	MEXTI->PR |= (1 << u8PinNumber); /* Reset By Setting The Pin */
 }
 /*================================== FUNC_END ==================================*/
 

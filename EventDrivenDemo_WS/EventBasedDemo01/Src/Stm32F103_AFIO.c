@@ -15,7 +15,7 @@ void MCAL_AFIO_SelectPort(u8 u8LineNumber, u8 u8PortID)
 {
 	if(u8LineNumber <= 3) {
 		/* Clear For Safety */
-		MAFIO->EXTICR1 &= ~(0b1111 << (4 * u8LineNumber) );
+//		MAFIO->EXTICR1 &= ~(0b1111 << (4 * u8LineNumber) );
 
 		MAFIO->EXTICR1 |= (u8PortID << (4 * u8LineNumber) );
 	}

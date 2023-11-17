@@ -25,46 +25,29 @@
 #include"Stm32f103_LCD.h"
 
 
-//void vToggleLedBLUE_CB() {
-//	MCAL_GPIO_IRQHandling(GPIO_PIN_NO_11);
-//	MCAL_GPIO_ToggleOutputPin(MGPIOC, 14);
-//}
+
+typedef enum {
+	PB1_EV,
+	PB4_EV,
+	NUM_EVENTS
+}Event_t;
 
 /* Declare global variables */
+volatile u8 events[NUM_EVENTS] = {0};
 
-u8 events[2];
-
-enum events {
-	PB1_EV = 0,
-	PB2_EV
-};
+void SetEvent(Event_t event) {
+	events[event] = 1;
+}
 
 void HandleEvent() {
-	if(events[0] == '1') {
-		if(MCAL_GPIO_ReadInputPin(MGPIOB, 11) == 0) {
-			MCAL_GPIO_ToggleOutputPin(MGPIOC, 14);
-		}
+	if(events[PB1_EV]) {
+		MCAL_GPIO_ToggleOutputPin(MGPIOC, 14);
+		events[PB1_EV] = 0;
 	}
-	else if(events[1] == '1') {
-		if(MCAL_GPIO_ReadInputPin(MGPIOB, 0) == 0) {
-			MCAL_GPIO_ToggleOutputPin(MGPIOA, 2);
-		}
+	if(events[PB4_EV]) {
+		MCAL_GPIO_ToggleOutputPin(MGPIOC, 15);
+		events[PB4_EV] = 0;
 	}
-}
-
-void SetEvent(u8 eventNum) {
-	if(eventNum == PB1_EV) {
-		events[0] = '1';
-	}
-	else if(eventNum == PB2_EV) {
-		events[1] = '1';
-	}
-}
-
-
-void delay()
-{
-	for(u32 i = 0; i < 500000 / 2; i++);
 }
 
 int main(void)
@@ -75,55 +58,52 @@ int main(void)
 	GPIOB_PCLK_EN();
 	/* Activate RCC for GPIOC */
 	GPIOC_PCLK_EN();
-
-	/* Initialize LCD */
-	HAL_LCD_LCDInit();
+	/* AFIO Clock Enable */
+	AFIO_PCLK_EN();
 
 	/* Configure SW1 (B11) as input */
 	GPIO_PinConfig_t PB_B11 = {11, INPUT_MODE, INPUT_PU_PL_MODE};
-	GPIO_Handle_t SW1 = {MGPIOB, PB_B11};
-	MCAL_GPIO_Init(&SW1);
-
-	/* Configure SW1 (B0) as input */
+	GPIO_Handle_t PB1 = {MGPIOB, PB_B11};
+	MCAL_GPIO_Init(&PB1);
+	/* Configure SW4 (B0) as input */
 	GPIO_PinConfig_t PB_B0 = {0, INPUT_MODE, INPUT_PU_PL_MODE};
-	GPIO_Handle_t SW2 = {MGPIOB, PB_B0};
-	MCAL_GPIO_Init(&SW2);
+	GPIO_Handle_t PB4 = {MGPIOB, PB_B0};
+	MCAL_GPIO_Init(&PB4);
 
+	/* Configure LED_C14 as output */
 	GPIO_PinConfig_t LED_C14 = {14, OUTPUT_10MHZ_MODE, GP_OUTPUT_PU_PL_MODE};
 	GPIO_Handle_t LED_BLUE = {MGPIOC, LED_C14};
 	MCAL_GPIO_Init(&LED_BLUE);
-
-	GPIO_PinConfig_t LED_A2 = {2, OUTPUT_10MHZ_MODE, GP_OUTPUT_PU_PL_MODE};
-	GPIO_Handle_t LED_RED1 = {MGPIOA, LED_A2};
-	MCAL_GPIO_Init(&LED_RED1);
+	/* Configure LED_C15 as output */
+	GPIO_PinConfig_t LED_C15 = {15, OUTPUT_10MHZ_MODE, GP_OUTPUT_PU_PL_MODE};
+	GPIO_Handle_t LED_GREEN = {MGPIOC, LED_C15};
+	MCAL_GPIO_Init(&LED_GREEN);
 
 	/*==================== Interrupt Configurations for SW1 ====================*/
-	AFIO_PCLK_EN();	/* AFIO Clock Enable */
+	MCAL_GPIO_IRQConfig(40 , EXTI_ENABLE);
 	MCAL_AFIO_SelectPort(11, 1); /* Line Number, Port ID */
 	MCAL_EXTI_InterruptEdgeType(11, EXTI_F_EDGE);
-	MCAL_GPIO_IRQConfig(40 , EXTI_ENABLE);
 	MCAL_EXTI_Enable(11);
-
-	/*==================== Interrupt Configurations for SW2 ====================*/
-//	MCAL_AFIO_SelectPort(0, 1); /* Line Number, Port ID */
-//	MCAL_EXTI_InterruptEdgeType(0, EXTI_F_EDGE);
-//	MCAL_GPIO_IRQConfig(6 , EXTI_ENABLE);
-//	MCAL_EXTI_Enable(0);
-
-//	HAL_LCD_LCDClear();
-//	u8 string[] = "Hello System";
-//	HAL_LCD_LCDWriteString(string);
+	/*==================== Interrupt Configurations for SW4 ====================*/
+	MCAL_GPIO_IRQConfig(6 , EXTI_ENABLE);
+	MCAL_AFIO_SelectPort(0, 1); /* Line Number, Port ID */
+	MCAL_EXTI_InterruptEdgeType(0, EXTI_F_EDGE);
+	MCAL_EXTI_Enable(0);
 
     /* Loop forever */
-	for(;;) {}
+	for(;;) {
+		HandleEvent();
+	}
 }
 
+/* PB1 */
 void EXTI15_10_IRQHandler(void) {
-	MCAL_GPIO_IRQHandling(GPIO_PIN_NO_11);
 	SetEvent(PB1_EV);
+	MCAL_GPIO_IRQHandling(GPIO_PIN_NO_11);
 }
 
+/* PB4 */
 void EXTI0_IRQHandler(void) {
+	SetEvent(PB4_EV);
 	MCAL_GPIO_IRQHandling(GPIO_PIN_NO_0);
-	SetEvent(PB2_EV);
 }

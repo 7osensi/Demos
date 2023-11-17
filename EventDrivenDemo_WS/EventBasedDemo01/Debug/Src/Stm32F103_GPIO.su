@@ -8,4 +8,4 @@
 ../Src/Stm32F103_GPIO.c:288:6:MCAL_GPIO_ToggleOutputPin	16	static
 ../Src/Stm32F103_GPIO.c:310:6:MCAL_GPIO_IRQConfig	16	static
 ../Src/Stm32F103_GPIO.c:343:6:MCAL_GPIO_IRQHandling	16	static
-../Src/Stm32F103_GPIO.c:357:6:GPIO_RegisterCallback	16	static
+../Src/Stm32F103_GPIO.c:354:6:GPIO_RegisterCallback	16	static
