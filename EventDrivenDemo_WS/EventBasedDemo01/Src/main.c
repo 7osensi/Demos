@@ -24,30 +24,60 @@
 #include"Stm32f103_AFIO.h"
 #include"Stm32f103_LCD.h"
 
-
-
 typedef enum {
-	PB1_EV,
-	PB4_EV,
-	NUM_EVENTS
-}Event_t;
+	EV_01,
+	EV_02
+}EventType;
 
-/* Declare global variables */
-volatile u8 events[NUM_EVENTS] = {0};
+typedef struct {
+	EventType type; // State name
+}Event;
 
-void SetEvent(Event_t event) {
-	events[event] = 1;
+// Message queue structure
+#define QUEUE_SIZE 10
+
+typedef struct {
+    Event events[QUEUE_SIZE]; // Array of structures
+    int front;
+    int rear;
+    int count;  // Number of events in the queue
+}MessageQueue;
+
+// Global message queue
+MessageQueue messageQueue;
+
+void EnqueueEvents(EventType event) {
+	// Check if the queue is full
+	if((messageQueue.rear + 1) % QUEUE_SIZE != messageQueue.front) {
+//		messageQueue.events[messageQueue.rear] = event;
+		messageQueue.events[messageQueue.rear].type = event;
+		// To make sure the queue will never its maximum size
+		messageQueue.rear = (messageQueue.rear + 1) % QUEUE_SIZE;
+		messageQueue.count++;
+	}
 }
 
-void HandleEvent() {
-	if(events[PB1_EV]) {
-		MCAL_GPIO_ToggleOutputPin(MGPIOC, 14);
-		events[PB1_EV] = 0;
+void DequeueEvents(Event *event) {
+	// Check if the queue is empty
+    if (messageQueue.front != messageQueue.rear) {
+        *event = messageQueue.events[messageQueue.front];
+        messageQueue.front = (messageQueue.front + 1) % QUEUE_SIZE;
+        messageQueue.count--;
+    }
+}
+
+void HandleProcess(void) {
+	Event currentEvent;
+	DequeueEvents(&currentEvent);
+
+	if(currentEvent.type == EV_01) {
+		MCAL_GPIO_ToggleOutputPin(MGPIOA, 1);
 	}
-	if(events[PB4_EV]) {
-		MCAL_GPIO_ToggleOutputPin(MGPIOC, 15);
-		events[PB4_EV] = 0;
-	}
+}
+
+void delay()
+{
+	for(u32 i = 0; i < 800000 / 2; i++);
 }
 
 int main(void)
@@ -61,29 +91,32 @@ int main(void)
 	/* AFIO Clock Enable */
 	AFIO_PCLK_EN();
 
-	/* Configure SW1 (B11) as input */
-	GPIO_PinConfig_t PB_B11 = {11, INPUT_MODE, INPUT_PU_PL_MODE};
-	GPIO_Handle_t PB1 = {MGPIOB, PB_B11};
-	MCAL_GPIO_Init(&PB1);
-	/* Configure SW4 (B0) as input */
-	GPIO_PinConfig_t PB_B0 = {0, INPUT_MODE, INPUT_PU_PL_MODE};
-	GPIO_Handle_t PB4 = {MGPIOB, PB_B0};
+	/* Initialize LCD */
+	HAL_LCD_LCDInit();
+
+	/* Configure PB4 (B10) as input */
+	GPIO_PinConfig_t PB_B10 = {10, INPUT_MODE, FLOATING_INPUT};
+	GPIO_Handle_t PB4 = {MGPIOB, PB_B10};
 	MCAL_GPIO_Init(&PB4);
+	/* Configure PB4 (B0) as input */
+	GPIO_PinConfig_t PB_B0 = {11, INPUT_MODE, FLOATING_INPUT};
+	GPIO_Handle_t PB1 = {MGPIOB, PB_B0};
+	MCAL_GPIO_Init(&PB1);
 
-	/* Configure LED_C14 as output */
-	GPIO_PinConfig_t LED_C14 = {14, OUTPUT_10MHZ_MODE, GP_OUTPUT_PU_PL_MODE};
-	GPIO_Handle_t LED_BLUE = {MGPIOC, LED_C14};
-	MCAL_GPIO_Init(&LED_BLUE);
-	/* Configure LED_C15 as output */
-	GPIO_PinConfig_t LED_C15 = {15, OUTPUT_10MHZ_MODE, GP_OUTPUT_PU_PL_MODE};
-	GPIO_Handle_t LED_GREEN = {MGPIOC, LED_C15};
-	MCAL_GPIO_Init(&LED_GREEN);
+	/* Configure LED_A2 as output */
+	GPIO_PinConfig_t LED_A2 = {2, OUTPUT_10MHZ_MODE, GP_OUTPUT_PU_PL_MODE};
+	GPIO_Handle_t LED_RED1 = {MGPIOA, LED_A2};
+	MCAL_GPIO_Init(&LED_RED1);
+	/* Configure LED_A1 as output */
+	GPIO_PinConfig_t LED_A1 = {1, OUTPUT_10MHZ_MODE, GP_OUTPUT_PU_PL_MODE};
+	GPIO_Handle_t LED_RED2 = {MGPIOA, LED_A1};
+	MCAL_GPIO_Init(&LED_RED2);
 
-	/*==================== Interrupt Configurations for SW1 ====================*/
+	/*==================== Interrupt Configurations for PB10 ====================*/
 	MCAL_GPIO_IRQConfig(40 , EXTI_ENABLE);
-	MCAL_AFIO_SelectPort(11, 1); /* Line Number, Port ID */
-	MCAL_EXTI_InterruptEdgeType(11, EXTI_F_EDGE);
-	MCAL_EXTI_Enable(11);
+	MCAL_AFIO_SelectPort(10, 1); /* Line Number, Port ID */
+	MCAL_EXTI_InterruptEdgeType(10, EXTI_F_EDGE);
+	MCAL_EXTI_Enable(10);
 	/*==================== Interrupt Configurations for SW4 ====================*/
 	MCAL_GPIO_IRQConfig(6 , EXTI_ENABLE);
 	MCAL_AFIO_SelectPort(0, 1); /* Line Number, Port ID */
@@ -92,18 +125,20 @@ int main(void)
 
     /* Loop forever */
 	for(;;) {
-		HandleEvent();
+//		EnqueueEvents(EV_01);
+		delay();
+		HandleProcess();
+
 	}
 }
 
-/* PB1 */
+/* PB2 */
 void EXTI15_10_IRQHandler(void) {
-	SetEvent(PB1_EV);
-	MCAL_GPIO_IRQHandling(GPIO_PIN_NO_11);
+	MCAL_GPIO_IRQHandling(10);
+	EnqueueEvents(EV_01);
 }
 
-/* PB4 */
-void EXTI0_IRQHandler(void) {
-	SetEvent(PB4_EV);
-	MCAL_GPIO_IRQHandling(GPIO_PIN_NO_0);
-}
+///* PB4 */
+//void EXTI0_IRQHandler(void) {
+//}
+

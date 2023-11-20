@@ -330,37 +330,37 @@ typedef struct
 
 typedef struct
 {
-    volatile u32 SR;     			/*   Address offset: 0x00 */
-    volatile u32 CR1;      			/*   Address offset: 0x04 */
-    volatile u32 CR2;     			/*   Address offset: 0x08 */
-    volatile u32 SMPR1;     		/*   Address offset: 0x0C */
-    volatile u32 SMPR2;    			/*   Address offset: 0x10 */
-    volatile u32 JOFR1;       		/*   Address offset: 0x14 */
-    volatile u32 JOFR2;				/*   Address offset: 0x18 */
-    volatile u32 JOFR3;				/*   Address offset: 0x1C */
-    volatile u32 JOFR4;				/*   Address offset: 0x20 */
-    volatile u32 HTR;				/*   Address offset: 0x24 */
-    volatile u32 LTR;				/*   Address offset: 0x28 */
-    volatile u32 SQR1;				/*   Address offset: 0x2C */
-    volatile u32 SQR2;				/*   Address offset: 0x30 */
-    volatile u32 SQR3;				/*   Address offset: 0x34 */
-    volatile u32 JSQR;				/*   Address offset: 0x38 */
-    volatile u32 JDR1;				/*   Address offset: 0x3C */
-    volatile u32 JDR2;				/*   Address offset: 0x40 */
-    volatile u32 JDR3;				/*   Address offset: 0x44 */
-    volatile u32 JDR4;				/*   Address offset: 0x48 */
-    volatile u32 DR;				/*   Address offset: 0x4C */
-}ADC_t;
+    u32 SR;     			/*   Address offset: 0x00 */
+    u32 CR1;      			/*   Address offset: 0x04 */
+    u32 CR2;     			/*   Address offset: 0x08 */
+    u32 SMPR1;     		/*   Address offset: 0x0C */
+    u32 SMPR2;    			/*   Address offset: 0x10 */
+    u32 JOFR1;       		/*   Address offset: 0x14 */
+    u32 JOFR2;				/*   Address offset: 0x18 */
+    u32 JOFR3;				/*   Address offset: 0x1C */
+    u32 JOFR4;				/*   Address offset: 0x20 */
+    u32 HTR;				/*   Address offset: 0x24 */
+    u32 LTR;				/*   Address offset: 0x28 */
+    u32 SQR1;				/*   Address offset: 0x2C */
+    u32 SQR2;				/*   Address offset: 0x30 */
+    u32 SQR3;				/*   Address offset: 0x34 */
+    u32 JSQR;				/*   Address offset: 0x38 */
+    u32 JDR1;				/*   Address offset: 0x3C */
+    u32 JDR2;				/*   Address offset: 0x40 */
+    u32 JDR3;				/*   Address offset: 0x44 */
+    u32 JDR4;				/*   Address offset: 0x48 */
+    u32 DR;				/*   Address offset: 0x4C */
+}volatile ADC_t;
 
 /*================================================================
 		Macro: Pointer of Type ADC_t Pointing to ADC1_BASE
 =================================================================*/
-#define MADC1        ( (ADC_t *)ADC1_BASE)
+#define MADC1        ((ADC_t *)ADC1_BASE)
 
 /*================================================================
 		Macro: Pointer of Type ADC_t Pointing to ADC2_BASE
 =================================================================*/
-#define MADC2        ( (ADC_t *)ADC2_BASE)
+#define MADC2        ((ADC_t *)ADC2_BASE)
 
 /*======================================== CLK Enable ========================================*/
 /*======================================== CLK Enable ========================================*/
