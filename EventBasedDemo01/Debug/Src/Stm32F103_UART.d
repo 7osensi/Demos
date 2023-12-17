@@ -1,0 +1,1 @@
+Src/Stm32F103_UART.o: ../Src/Stm32F103_UART.c

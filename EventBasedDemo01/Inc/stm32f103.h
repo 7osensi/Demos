@@ -28,7 +28,7 @@
 #define PERIPHERALS_BASE		0x40000000U
 
 /* APBx and AHB Busses Addresses */
-#define APB1_BASE				PERIPHERAL_BASE
+#define APB1_BASE				PERIPHERALS_BASE
 #define APB2_BASE				0x40010000U
 #define AHB_BASE				0x40018000U
 
@@ -362,6 +362,34 @@ typedef struct
 =================================================================*/
 #define MADC2        ((ADC_t *)ADC2_BASE)
 
+/*================================================================
+			USART Struct :>:>: Register Map : USART
+=================================================================*/
+typedef struct{
+	u32 USART_SR;
+	u32 USART_DR;
+	u32 USART_BRR;
+	u32 USART_CR1;
+	u32 USART_CR2;
+	u32 USART_CR3;
+	u32 USART_GTPR;
+}volatile USART_t;
+
+/*================================================================
+		Macro: Pointer of Type USART_t Pointing to USART1_BASE
+=================================================================*/
+#define MUSART1	((USART_t *)USART1_BASE)
+
+/*================================================================
+		Macro: Pointer of Type USART_t Pointing to USART2_BASE
+=================================================================*/
+#define MUSART2	((USART_t *)USART2_BASE)
+
+/*================================================================
+		Macro: Pointer of Type USART_t Pointing to USART3_BASE
+=================================================================*/
+#define MUSART3	((USART_t *)USART3_BASE)
+
 /*======================================== CLK Enable ========================================*/
 /*======================================== CLK Enable ========================================*/
 /*======================================== CLK Enable ========================================*/
@@ -403,6 +431,7 @@ typedef struct
 #define ADC1_PCLK_EN()		MRCC->APB2ENR |= (1 << 9); 	/* ADC1 Clock Enable */
 #define ADC2_PCLK_EN()		MRCC->APB2ENR |= (1 << 10); /* ADC2 Clock Enable */
 
+
 /*======================================== CLK Disable ========================================*/
 /*======================================== CLK Disable ========================================*/
 /*======================================== CLK Disable ========================================*/
@@ -443,5 +472,6 @@ typedef struct
 =================================================================*/
 #define ADC1_PCLK_DIS()		MRCC->APB2STR |= (1 << 9); 	/* ADC1 Clock Disable */
 #define ADC2_PCLK_DIS()		MRCC->APB2STR |= (1 << 10); /* ADC2 Clock Disable */
+
 
 #endif /* INC_STM32F103_H_ */

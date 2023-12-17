@@ -1,0 +1,4 @@
+../Inc/ringbuf.h:25:4:ringbuf_read	24	static
+../Src/main2.c:20:6:delay	16	static
+../Src/main2.c:34:5:main	56	static
+../Src/main2.c:73:6:USART1_IRQHandler	8	static
