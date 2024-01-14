@@ -179,4 +179,5 @@ void USART_ClearFlag(USART_t *pUSARTx, u16 StatusFlagName);
  */
 void USART_ApplicationEventCallback(USART_Handle_t *pUSARTHandle,u8 AppEv);
 
+void UART_CB_Assignment(void (*Callback_ptr)(void));
 #endif /* STM32F103_USART_H_ */

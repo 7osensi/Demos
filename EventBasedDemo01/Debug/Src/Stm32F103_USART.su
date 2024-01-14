@@ -1,6 +1,8 @@
-../Src/Stm32F103_USART.c:10:6:USART_PeriClockControl	16	static
-../Src/Stm32F103_USART.c:42:6:USART_PeriControl	16	static
-../Src/Stm32F103_USART.c:51:6:USART_Init	24	static
-../Src/Stm32F103_USART.c:138:6:USART_SetBaudRate	24	static
-../Src/Stm32F103_USART.c:151:6:USART_ReceiveByte	16	static
-../Src/Stm32F103_USART.c:159:6:USART_SendByte	16	static
+../Src/Stm32F103_USART.c:11:6:USART_PeriClockControl	16	static
+../Src/Stm32F103_USART.c:43:6:USART_PeriControl	16	static
+../Src/Stm32F103_USART.c:52:6:USART_Init	24	static
+../Src/Stm32F103_USART.c:139:6:USART_SetBaudRate	24	static
+../Src/Stm32F103_USART.c:152:6:USART_ReceiveByte	16	static
+../Src/Stm32F103_USART.c:160:6:USART_SendByte	16	static
+../Src/Stm32F103_USART.c:167:6:UART_CB_Assignment	16	static
+../Src/Stm32F103_USART.c:171:6:USART1_IRQHandler	8	static

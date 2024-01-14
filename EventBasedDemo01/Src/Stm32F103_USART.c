@@ -4,8 +4,9 @@
  *  Created on: Dec 12, 2023
  *      Author: 7osensi
  */
-
 #include <Stm32F103_USART.h>
+
+void (*UARTptrToFunction)(void) = NULL;
 
 void USART_PeriClockControl(USART_t *pUSARTx, u8 EnorDi) {
 	if(pUSARTx == MUSART1) {
@@ -163,8 +164,15 @@ void USART_SendByte(USART_t *pUSARTx, u8 *pRxBuffer) {
 	pUSARTx->USART_DR = *pRxBuffer;
 }
 
+void UART_CB_Assignment(void (*Callback_ptr)(void)) {
+	UARTptrToFunction = Callback_ptr;
+}
 
-
+void USART1_IRQHandler(void) {
+	if (MUSART1->USART_SR >> 5 & 1) {
+		UARTptrToFunction();
+	}
+}
 
 
 

@@ -8,7 +8,7 @@
 /*================================== #include ==================================*/
 #include"Stm32F103_ADC.h"
 
-void (*ptrFunction)(void) = NULL;
+void (*ADCptrFunction)(void) = NULL;
 
 /*================================= FUNC_START ================================*/
 extern void ADC_Init(ADC_HandleTypeDef *pADCxHandle)
@@ -62,7 +62,7 @@ extern u16 ADC_Read(ADC_HandleTypeDef *pADCxHandle)
 /*================================= FUNC_START ================================*/
 void ADC_Registering(void(*pCallBack)(void))
 {
-	ptrFunction = pCallBack;
+	ADCptrFunction = pCallBack;
 }
 /*================================= FUNC_END   ================================*/
 
